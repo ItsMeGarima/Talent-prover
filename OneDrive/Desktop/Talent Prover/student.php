@@ -2,8 +2,38 @@
 require_once '../config/db.php';
 require_once '../config/session.php';
 require_once 'student_layout.php';
-requireExactRole('student');
 
+if (!function_exists('requireExactRole')) {
+    if (function_exists('requireRole')) {
+        function requireExactRole($role)
+        {
+            return requireRole($role);
+        }
+    } else {
+        function requireExactRole($role)
+        {
+            if (session_status() !== PHP_SESSION_ACTIVE) {
+                session_start();
+            }
+
+            $sessionRole = null;
+            if (isset($_SESSION['user_role'])) {
+                $sessionRole = $_SESSION['user_role'];
+            } elseif (isset($_SESSION['role'])) {
+                $sessionRole = $_SESSION['role'];
+            } elseif (isset($_SESSION['user']['role'])) {
+                $sessionRole = $_SESSION['user']['role'];
+            }
+
+            if ($sessionRole !== $role) {
+                header('Location: /login.php');
+                exit;
+            }
+        }
+    }
+}
+
+requireExactRole('student');
 
 $pdo = getDB();
 $profile = getStudentProfile($pdo);
