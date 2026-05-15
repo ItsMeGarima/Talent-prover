@@ -60,6 +60,7 @@ $avatar = !empty($profile['profile_image'])
                     <em class="fa-regular fa-clipboard"></em>
                 </a>
             </div>
+            
             <div>
                 <a class="student-stat-card student-stat-link amber" href="/dashboard/submissions.php">
                     <i class="fa-solid fa-paper-plane"></i>
